@@ -167,6 +167,7 @@
         return fetch(CFG.forms, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) }).then(function (r) { if (!r.ok) throw new Error('http'); return r.json().catch(function () { return {}; }); });
       }).then(function () {
         goal('form_submit', { form: payload.form });
+        if (window.__axSent) window.__axSent({ at: Date.now(), name: (form.closest('section, .card, main') && (form.closest('section, .card, main').querySelector('h2, h1') || {}).textContent || document.title).trim().slice(0, 80), page: location.pathname, items: payload.items ? payload.items.length : 0 });
         msg.textContent = 'Спасибо, заявка отправлена. Менеджер свяжется с вами в рабочее время.'; msg.className = 'fmsg ok';
         form.reset(); $$('.drop', form).forEach(function (d) { d.classList.remove('has'); var t = d.querySelector('[data-drop-t]'); if (t) t.textContent = ''; });
         if (payload.items) { saveCart([]); }
@@ -326,14 +327,99 @@
     tabsBox.addEventListener('click', function (e) { var b = e.target.closest('[data-k]'); if (b) { kind = b.getAttribute('data-k'); run(); } });
   }
 
-  /* ---------- кабинет: вход ---------- */
-  var lf = $('[data-login-form]');
-  if (lf) {
-    lf.addEventListener('submit', function (e) {
-      e.preventDefault();
-      var msg = $('.fmsg', lf), mail = $('#l-mail').value.trim();
-      if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(mail)) { msg.textContent = 'Проверьте адрес почты.'; msg.className = 'fmsg err'; return; }
-      msg.textContent = 'Вход подключим вместе с переносом сайта: он будет общий с «Аналогично!». Пока войти можно в самой программе.'; msg.className = 'fmsg ok';
+  /* ---------- аккаунт (общий с «Аналогично!») ---------- */
+  var AUTH = { token: '', user: null };
+  try { var sv = JSON.parse(localStorage.getItem('ax-auth') || 'null'); if (sv && sv.token) { AUTH.token = sv.token; AUTH.user = sv.user || null; } } catch (e) {}
+  function saveAuth() { try { localStorage.setItem('ax-auth', JSON.stringify(AUTH.token ? AUTH : null)); } catch (e) {} }
+  function authApi(body) {
+    if (!CFG.auth) return Promise.reject(new Error('Вход временно недоступен.'));
+    return fetch(CFG.auth, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) })
+      .then(function (r) { return r.json().catch(function () { return {}; }).then(function (j) { if (!r.ok) { var er = new Error(j.error || 'Сервис временно недоступен. Попробуйте позже.'); er.status = r.status; throw er; } return j; }); },
+        function () { throw new Error('Нет связи с сервером. Проверьте интернет и попробуйте ещё раз.'); });
+  }
+  var hasProfile = function () { return !!(AUTH.token && AUTH.user && AUTH.user.fio); };
+
+  // заявки, отправленные с этого устройства
+  function sentList() { try { return JSON.parse(localStorage.getItem('ax-sent') || '[]'); } catch (e) { return []; } }
+  window.__axSent = function (rec) { try { var l = sentList(); l.unshift(rec); localStorage.setItem('ax-sent', JSON.stringify(l.slice(0, 30))); } catch (e) {} };
+
+  // автозаполнение контактов в формах сайта
+  function autofill() {
+    if (!hasProfile()) return;
+    var u = AUTH.user, map = [[/^(имя|фио|контактное лицо|ваше имя)/i, u.fio], [/телефон/i, u.phone], [/почт/i, u.email], [/организац|компан/i, [u.company, u.inn ? 'ИНН ' + u.inn : ''].filter(Boolean).join(', ')]];
+    $$('form[data-form] input, form[data-form] textarea').forEach(function (el) {
+      if (el.value || el.type === 'file' || el.type === 'checkbox' || el.name === 'website') return;
+      var lab = el.id ? document.querySelector('label[for="' + el.id + '"]') : null, t = lab ? lab.textContent.trim() : (el.getAttribute('aria-label') || '');
+      for (var k = 0; k < map.length; k++) if (map[k][0].test(t) && map[k][1]) { el.value = map[k][1]; break; }
     });
+  }
+  autofill();
+  $$('a[href="/kabinet"]').forEach(function (a) { if (hasProfile()) { var n = a.lastChild; if (n && n.nodeType === 3 && /Войти/.test(n.textContent)) n.textContent = AUTH.user.fio.split(' ').slice(0, 2).reverse().join(' ').split(' ')[0]; } });
+
+  /* ---------- кабинет ---------- */
+  var kbOut = $('[data-auth-out]'), kbIn = $('[data-auth-in]');
+  if (kbOut && kbIn) {
+    var f1 = $('[data-kb-step="1"]'), f2 = $('[data-kb-step="2"]'), pf = $('[data-kb-profile]'), email = '';
+    var say = function (f, t, bad) { var m = $('.fmsg', f); m.textContent = t; m.className = 'fmsg' + (t ? (bad ? ' err' : ' ok') : ''); };
+    var innValid = function (v) { var d = String(v).replace(/\D/g, ''); if (!/^(\d{10}|\d{12})$/.test(d)) return false; var c = function (w, n) { var s = 0; for (var i = 0; i < w.length; i++) s += w[i] * +d[i]; return (s % 11) % 10 === +d[n]; }; return d.length === 10 ? c([2, 4, 10, 3, 5, 9, 4, 6, 8], 9) : c([7, 2, 4, 10, 3, 5, 9, 4, 6, 8], 10) && c([3, 7, 2, 4, 10, 3, 5, 9, 4, 6, 8], 11); };
+    function show() {
+      var inn = !!AUTH.token;
+      kbOut.classList.toggle('hidden', inn); kbIn.classList.toggle('hidden', !inn);
+      if (!inn) { f1.classList.remove('hidden'); f2.classList.add('hidden'); return; }
+      var u = AUTH.user || {};
+      $('[data-kb-ini]').textContent = (u.fio || u.email || '?').split(' ').slice(0, 2).map(function (x) { return x[0] || ''; }).join('').toUpperCase();
+      $('[data-kb-name]').textContent = u.fio || 'Заполните профиль';
+      $('[data-kb-sub]').textContent = [u.company, u.email].filter(Boolean).join(' · ');
+      $('[data-kb-ptitle]').textContent = u.fio ? 'Профиль' : 'Расскажите о себе';
+      $('[data-kb-pnote]').textContent = u.fio ? 'Эти данные подставляются в заявки и формы сайта.' : 'Один раз — и данные будут подставляться в заявки. Анкета общая с «Аналогично!».';
+      $('#p-fio').value = u.fio || ''; $('#p-phone').value = u.phone || ''; $('#p-pos').value = u.position || '';
+      $('#p-company').value = u.company || ''; $('#p-inn').value = u.inn || ''; $('#p-mail').value = u.email || email || '';
+      $('#p-ok').checked = !!u.fio;
+      var l = sentList(), box = $('[data-kb-sent]');
+      box.innerHTML = l.length ? l.map(function (r) {
+        var d = new Date(r.at); return '<div class="it"><div><b>' + esc(r.name) + '</b>' + (r.items ? esc(r.items + ' поз.') : esc(r.page || '')) + '</div><span>' + d.toLocaleDateString('ru-RU') + '</span></div>';
+      }).join('') : '<div class="empty-s">Пока нет отправленных заявок</div>';
+    }
+    f1.addEventListener('submit', function (e) {
+      e.preventDefault();
+      var v = $('#l-mail').value.trim(), b = $('button', f1);
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v)) return say(f1, 'Проверьте адрес почты.', true);
+      say(f1, 'Отправляем код…'); b.disabled = true;
+      authApi({ action: 'send-code', email: v }).then(function () {
+        email = v; $('[data-kb-mail]').textContent = v; $('#l-code').value = ''; say(f2, '');
+        f1.classList.add('hidden'); f2.classList.remove('hidden'); $('#l-code').focus();
+      }, function (er) { say(f1, er.message, true); }).then(function () { b.disabled = false; });
+    });
+    $('[data-kb-back]').addEventListener('click', function () { f2.classList.add('hidden'); f1.classList.remove('hidden'); say(f1, ''); $('#l-mail').focus(); });
+    f2.addEventListener('submit', function (e) {
+      e.preventDefault();
+      var code = $('#l-code').value.replace(/\D/g, ''), b = $('button[type=submit]', f2);
+      if (code.length !== 6) return say(f2, 'Введите 6 цифр из письма.', true);
+      say(f2, 'Проверяем…'); b.disabled = true;
+      authApi({ action: 'verify', email: email, code: code }).then(function (j) {
+        AUTH.token = j.token; AUTH.user = j.user || { email: email }; saveAuth(); goal('auth_login'); show();
+        if (!hasProfile()) $('#p-fio').focus();
+      }, function (er) { say(f2, er.message, true); }).then(function () { b.disabled = false; });
+    });
+    pf.addEventListener('submit', function (e) {
+      e.preventDefault();
+      var p = { fio: $('#p-fio').value.trim(), phone: $('#p-phone').value.trim(), position: $('#p-pos').value.trim(), company: $('#p-company').value.trim(), inn: $('#p-inn').value.replace(/\D/g, ''), consent: $('#p-ok').checked };
+      var errs = [];
+      if (p.fio.split(/\s+/).filter(Boolean).length < 2) errs.push('укажите фамилию и имя');
+      if (p.phone.replace(/\D/g, '').length < 10) errs.push('проверьте телефон');
+      if (!p.company) errs.push('укажите компанию');
+      if (!innValid(p.inn)) errs.push('проверьте ИНН');
+      if (!p.consent) errs.push('отметьте согласие на обработку данных');
+      if (errs.length) return say(pf, 'Пожалуйста, ' + errs.join(', ') + '.', true);
+      var b = $('button[type=submit]', pf); say(pf, 'Сохраняем…'); b.disabled = true;
+      var body = { action: 'register', token: AUTH.token }; for (var k in p) body[k] = p[k];
+      authApi(body).then(function (j) { AUTH.user = j.user; saveAuth(); goal('auth_register'); show(); say(pf, 'Сохранено.'); },
+        function (er) { if (er.status === 401) { AUTH.token = ''; AUTH.user = null; saveAuth(); show(); say(f1, 'Сессия истекла — запросите код ещё раз.', true); } else say(pf, er.message, true); })
+        .then(function () { b.disabled = false; });
+    });
+    $('[data-kb-out]').addEventListener('click', function () { AUTH.token = ''; AUTH.user = null; saveAuth(); show(); });
+    show();
+    // сохранённый вход ещё действует? заодно подтягиваем профиль
+    if (AUTH.token) authApi({ action: 'me', token: AUTH.token }).then(function (j) { AUTH.user = j.user; saveAuth(); show(); }, function (er) { if (er.status === 401) { AUTH.token = ''; AUTH.user = null; saveAuth(); show(); } });
   }
 })();

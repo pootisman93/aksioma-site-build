@@ -20,7 +20,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="/static/site.css?v=202611211909">
+<link rel="stylesheet" href="/static/site.css?v=202611212111">
 <script>try{var t=localStorage.getItem('ax-theme');if(t==='dark'||(!t&&window.matchMedia&&matchMedia('(prefers-color-scheme: dark)').matches)){document.documentElement.className='ax dark'}}catch(e){}</script>
 
 </head>
@@ -158,20 +158,72 @@
 
 <div class="wrap">
 <nav class="crumbs" aria-label="Навигация"><a href="/">Главная</a><i>/</i><span>Личный кабинет</span></nav>
-<div class="ph"><h1 class="h1">Личный кабинет</h1><p class="lead">Один вход для сайта и программы «Аналогично!»: история спецификаций, запросы КП и их статусы.</p></div>
-<div class="card login-g" data-login>
-<div><h2 class="h3">Вход по коду на почту</h2><p class="p">Без пароля: введите почту, получите код из 6 цифр, он действует 15 минут. Если вы уже регистрировались в «Аналогично!», используйте ту же почту.</p></div>
-<form class="form" style="grid-template-columns: 1fr;" aria-label="Вход" data-login-form novalidate>
-<div class="fld" data-step="mail"><label for="l-mail">Электронная почта</label><input class="inp" id="l-mail" type="email" autocomplete="email" placeholder="name@company.ru" required></div>
-<div class="fld hidden" data-step="code"><label for="l-code">Код из письма</label><input class="inp" id="l-code" inputmode="numeric" maxlength="6" placeholder="000000"></div>
-<button class="btn btn-p" type="submit" data-login-btn>Получить код</button>
+<div class="ph"><h1 class="h1">Личный кабинет</h1><p class="lead">Один аккаунт для сайта и программы «Аналогично!». Пароль не нужен — присылаем код на почту.</p></div>
+
+<!-- вход -->
+<div class="card login-g" data-auth-out>
+<div>
+<h2 class="h3">Вход по коду на почту</h2>
+<p class="p">Введите почту и получите код из 6 цифр. Если вы уже входили в «Аналогично!», используйте ту же почту — аккаунт общий.</p>
+<ul class="kb-why">
+<li>Контакты в заявках и формах заполняются сами</li>
+<li>Заявки, отправленные с этого устройства, — в одном списке</li>
+<li>«Аналогично!» без ограничений на число спецификаций</li>
+</ul>
+</div>
+<div>
+<form class="form" style="grid-template-columns: 1fr;" aria-label="Вход" data-kb-step="1" novalidate>
+<div class="fld"><label for="l-mail">Электронная почта</label><input class="inp" id="l-mail" type="email" autocomplete="email" placeholder="name@company.ru" required></div>
+<button class="btn btn-p" type="submit">Получить код</button>
+<div class="fmsg" role="status" aria-live="polite"></div>
+</form>
+<form class="form hidden" style="grid-template-columns: 1fr;" aria-label="Код из письма" data-kb-step="2" novalidate>
+<p class="ps" style="margin: 0;">Код отправлен на <b data-kb-mail></b>. Письмо может прийти через минуту-две, проверьте и папку «Спам».</p>
+<div class="fld"><label for="l-code">Код из письма</label><input class="inp" id="l-code" inputmode="numeric" autocomplete="one-time-code" maxlength="6" placeholder="000000"></div>
+<button class="btn btn-p" type="submit">Войти</button>
+<button class="btn btn-o" type="button" data-kb-back>Указать другую почту</button>
 <div class="fmsg" role="status" aria-live="polite"></div>
 </form>
 </div>
-<div class="g3" style="margin-top: 24px;">
-<div class="soft"><h3 class="h4">История спецификаций</h3><p class="ps">Все файлы, которые вы проверяли в «Аналогично!».</p></div>
-<div class="soft"><h3 class="h4">Запросы КП и статусы</h3><p class="ps">Видно, какие КП готовятся, а какие уже отправлены.</p></div>
-<div class="soft"><h3 class="h4">Контакты заполняются сами</h3><p class="ps">В заявках и формах не нужно вводить данные заново.</p></div>
+</div>
+
+<!-- анкета (первый вход) и профиль -->
+<div class="hidden" data-auth-in>
+<div class="kb-top card">
+<span class="kb-av" data-kb-ini aria-hidden="true"></span>
+<div style="min-width: 0; flex: 1;"><b class="h4" data-kb-name style="display: block;"></b><span class="ps" data-kb-sub style="display: block; margin: 2px 0 0;"></span></div>
+<button class="btn btn-o btn-s" type="button" data-kb-out>Выйти</button>
+</div>
+
+<div class="kb-g">
+<form class="card form" aria-label="Профиль" data-kb-profile novalidate>
+<div style="grid-column: 1 / -1;"><h2 class="h3" data-kb-ptitle>Профиль</h2><p class="ps" data-kb-pnote style="margin: 6px 0 0;">Эти данные подставляются в заявки и используются для КП.</p></div>
+<div class="fld"><label for="p-fio">Фамилия и имя</label><input class="inp" id="p-fio" autocomplete="name" required></div>
+<div class="fld"><label for="p-phone">Телефон</label><input class="inp" id="p-phone" type="tel" autocomplete="tel" placeholder="+7" required></div>
+<div class="fld"><label for="p-pos">Должность</label><input class="inp" id="p-pos" autocomplete="organization-title"></div>
+<div class="fld"><label for="p-company">Компания</label><input class="inp" id="p-company" autocomplete="organization" required></div>
+<div class="fld"><label for="p-inn">ИНН компании</label><input class="inp" id="p-inn" inputmode="numeric" maxlength="12" required></div>
+<div class="fld"><label for="p-mail">Почта</label><input class="inp" id="p-mail" type="email" disabled></div>
+<label class="chk kb-ok" style="grid-column: 1 / -1;"><input type="checkbox" id="p-ok"> <span>Согласен на обработку персональных данных по <a href="/privacy">политике конфиденциальности</a></span></label>
+<div style="grid-column: 1 / -1; display: flex; gap: 12px; flex-wrap: wrap; align-items: center;"><button class="btn btn-p" type="submit">Сохранить</button><div class="fmsg" role="status" aria-live="polite" style="margin: 0;"></div></div>
+</form>
+
+<div style="display: grid; gap: 20px; align-content: start;">
+<div class="card">
+<h2 class="h3">Быстрые действия</h2>
+<div class="kb-acts">
+<a class="btn btn-w" href="https://analog.aksioma-vent.ru" data-goal="open_analog">Подобрать аналоги</a>
+<a class="btn btn-o" href="/zayavka">Моя заявка</a>
+<a class="btn btn-o" href="/katalog">Каталог</a>
+</div>
+</div>
+<div class="card">
+<h2 class="h3">Заявки с этого устройства</h2>
+<p class="ps" style="margin: 6px 0 0;">Хранятся только в этом браузере. Ответ менеджера придёт на почту или по телефону.</p>
+<div data-kb-sent class="kb-sent"></div>
+</div>
+</div>
+</div>
 </div>
 </div>
 
@@ -207,9 +259,9 @@
 </nav>
 <div class="toast" role="status" aria-live="polite" data-toast></div>
 
-<script>window.AX={site:{"analog": "https://analog.aksioma-vent.ru", "forms": "https://functions.yandexcloud.net/d4eapejqjj24ihebaa3e", "metrika": ""}};</script>
+<script>window.AX={site:{"analog": "https://analog.aksioma-vent.ru", "auth": "https://functions.yandexcloud.net/d4eaf60b60tqqrhiki5d", "forms": "https://functions.yandexcloud.net/d4eapejqjj24ihebaa3e", "metrika": ""}};</script>
 
-<script src="/static/app.js?v=202611211909" defer></script>
+<script src="/static/app.js?v=202611212111" defer></script>
 
 </body>
 </html>
