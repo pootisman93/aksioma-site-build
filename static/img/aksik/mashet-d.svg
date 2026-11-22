@@ -1,0 +1,187 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="400" height="460" viewBox="0 0 400 460" role="img" aria-label="Аксик — маскот «Аксиомы»: буква «А» в строительной каске и с поясом для инструментов">
+<defs>
+<linearGradient id="axmainhappywave400body" x1="0" y1="0" x2="1" y2="0">
+<stop offset="0" stop-color="#3767A8"></stop>
+<stop offset="0.45" stop-color="#1F4478"></stop>
+<stop offset="1" stop-color="#10264A"></stop>
+</linearGradient>
+<radialGradient id="axmainhappywave400hat" cx="0.35" cy="0.3" r="0.85">
+<stop offset="0" stop-color="#FFFFFF"></stop>
+<stop offset="1" stop-color="#C3CDDB"></stop>
+</radialGradient>
+<linearGradient id="axmainhappywave400belt" x1="0" y1="0" x2="0" y2="1">
+<stop offset="0" stop-color="#F9AE63"></stop>
+<stop offset="0.5" stop-color="#F28C28"></stop>
+<stop offset="1" stop-color="#C35F0E"></stop>
+</linearGradient>
+<linearGradient id="axmainhappywave400pouch" x1="0" y1="0" x2="0" y2="1">
+<stop offset="0" stop-color="#D9731A"></stop>
+<stop offset="1" stop-color="#A44E0B"></stop>
+</linearGradient>
+<linearGradient id="axmainhappywave400metal" x1="0" y1="0" x2="0" y2="1">
+<stop offset="0" stop-color="#F4F7FA"></stop>
+<stop offset="1" stop-color="#8996A8"></stop>
+</linearGradient>
+<linearGradient id="axmainhappywave400boot" x1="0" y1="0" x2="0" y2="1">
+<stop offset="0" stop-color="#B07840"></stop>
+<stop offset="1" stop-color="#6E4321"></stop>
+</linearGradient>
+<radialGradient id="axmainhappywave400glove" cx="0.35" cy="0.35" r="0.75">
+<stop offset="0" stop-color="#FFFFFF"></stop>
+<stop offset="1" stop-color="#C9D3E0"></stop>
+</radialGradient>
+<radialGradient id="axmainhappywave400shadow" cx="0.5" cy="0.5" r="0.5">
+<stop offset="0" stop-color="#A9BEDC" stop-opacity="0.32"></stop>
+<stop offset="1" stop-color="#A9BEDC" stop-opacity="0"></stop>
+</radialGradient>
+<radialGradient id="axmainhappywave400cheek" cx="0.5" cy="0.5" r="0.5">
+<stop offset="0" stop-color="#F59A6B" stop-opacity="0.85"></stop>
+<stop offset="1" stop-color="#F59A6B" stop-opacity="0"></stop>
+</radialGradient>
+</defs>
+
+<ellipse cx="200" cy="444" rx="170" ry="16" fill="url(#axmainhappywave400shadow)"></ellipse>
+
+
+
+
+
+
+<g>
+<path d="M140,262 Q96,238 86,192 M262,262 Q300,286 312,326" stroke="#A9BEDC" stroke-width="26" stroke-linecap="round" fill="none"></path>
+<path d="M140,262 Q96,238 86,192 M262,262 Q300,286 312,326" stroke="#2A5490" stroke-width="18" stroke-linecap="round" fill="none"></path>
+<path d="M132,254 Q101,236 92,200 M268,258 Q298,280 308,316" stroke="#FFFFFF" stroke-width="4" stroke-linecap="round" fill="none" opacity="0.25"></path>
+</g>
+
+
+
+
+
+
+
+
+<path d="M200,72 L332,412 L248,412 L200,342 L152,412 L68,412 Z" fill="#A9BEDC" stroke="#A9BEDC" stroke-width="30" stroke-linejoin="round"></path>
+<path d="M200,72 L332,412 L248,412 L200,342 L152,412 L68,412 Z" fill="url(#axmainhappywave400body)" stroke="url(#axmainhappywave400body)" stroke-width="22" stroke-linejoin="round"></path>
+<path d="M200,82 L330,406 L250,406 L224,370 Q240,250 200,82 Z" fill="#A9BEDC" opacity="0.2"></path>
+<path d="M192,104 Q150,232 90,398" stroke="#FFFFFF" stroke-width="7" stroke-linecap="round" fill="none" opacity="0.2"></path>
+<path d="M200,348 L170,394" stroke="#A9BEDC" stroke-width="4" stroke-linecap="round" fill="none" opacity="0.35"></path>
+
+<path d="M66,424 L70,398 Q72,390 82,390 H140 Q150,390 152,398 L160,424 Z" fill="url(#axmainhappywave400boot)" stroke="#A9BEDC" stroke-width="3" stroke-linejoin="round"></path>
+<rect x="52" y="422" width="116" height="14" rx="7" fill="#2B1D12" stroke="#A9BEDC" stroke-width="3"></rect>
+<path d="M76,406 Q88,396 104,400" stroke="#FFFFFF" stroke-width="3" stroke-linecap="round" fill="none" opacity="0.35"></path>
+<path d="M116,400 L140,404 M116,409 L141,413" stroke="#F3E2C8" stroke-width="2.5" stroke-linecap="round"></path>
+<path d="M240,424 L248,398 Q250,390 260,390 H318 Q328,390 330,398 L334,424 Z" fill="url(#axmainhappywave400boot)" stroke="#A9BEDC" stroke-width="3" stroke-linejoin="round"></path>
+<rect x="232" y="422" width="116" height="14" rx="7" fill="#2B1D12" stroke="#A9BEDC" stroke-width="3"></rect>
+<path d="M296,400 Q312,396 324,406" stroke="#FFFFFF" stroke-width="3" stroke-linecap="round" fill="none" opacity="0.35"></path>
+<path d="M260,404 L284,400 M259,413 L284,409" stroke="#F3E2C8" stroke-width="2.5" stroke-linecap="round"></path>
+
+<path d="M94,300 C150,284 172,314 200,304 C230,294 254,282 306,292 L306,328 C254,318 230,330 200,340 C172,350 150,320 94,336 Z" fill="url(#axmainhappywave400belt)" stroke="#A9BEDC" stroke-width="3" stroke-linejoin="round"></path>
+<path d="M100,307 C152,292 172,321 200,311 C230,301 254,289 300,299" stroke="#FFF1E0" stroke-width="1.8" stroke-dasharray="5 4" fill="none" opacity="0.8"></path>
+<path d="M100,329 C152,314 172,343 200,333 C230,323 254,311 300,321" stroke="#FFF1E0" stroke-width="1.8" stroke-dasharray="5 4" fill="none" opacity="0.8"></path>
+<path d="M94,300 L108,297 L108,333 L94,336 Z" fill="#A9BEDC" opacity="0.3"></path>
+<path d="M292,290 L306,292 L306,328 L292,326 Z" fill="#A9BEDC" opacity="0.3"></path>
+<circle cx="234" cy="314" r="2.6" fill="#A9BEDC" opacity="0.55"></circle>
+<circle cx="250" cy="310" r="2.6" fill="#A9BEDC" opacity="0.55"></circle>
+<circle cx="266" cy="306" r="2.6" fill="#A9BEDC" opacity="0.55"></circle>
+<rect x="182" y="306" width="36" height="32" rx="7" fill="none" stroke="#A9BEDC" stroke-width="10"></rect>
+<rect x="182" y="306" width="36" height="32" rx="7" fill="none" stroke="url(#axmainhappywave400metal)" stroke-width="6"></rect>
+<path d="M200,311 L200,333" stroke="#7D8899" stroke-width="3.5" stroke-linecap="round"></path>
+
+<rect x="124" y="302" width="12" height="34" rx="5" fill="#E24A2E" stroke="#A9BEDC" stroke-width="2.5"></rect>
+<path d="M130,307 L130,328" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round" opacity="0.45"></path>
+<rect x="142" y="308" width="8" height="28" fill="#F5C542" stroke="#A9BEDC" stroke-width="2"></rect>
+<path d="M142,308 L146,296 L150,308 Z" fill="#F3D7B0" stroke="#A9BEDC" stroke-width="2" stroke-linejoin="round"></path>
+<path d="M110,334 H162 V372 Q162,392 142,392 H130 Q110,392 110,372 Z" fill="url(#axmainhappywave400pouch)" stroke="#A9BEDC" stroke-width="3" stroke-linejoin="round"></path>
+<path d="M116,350 V370 Q116,386 132,386 H140 Q156,386 156,370 V350" stroke="#FFF1E0" stroke-width="1.5" stroke-dasharray="4 3" fill="none" opacity="0.6"></path>
+<path d="M106,330 H166 V344 Q136,358 106,344 Z" fill="url(#axmainhappywave400belt)" stroke="#A9BEDC" stroke-width="3" stroke-linejoin="round"></path>
+<circle cx="136" cy="347" r="3.5" fill="url(#axmainhappywave400metal)" stroke="#A9BEDC" stroke-width="1.5"></circle>
+
+<rect x="268" y="298" width="9" height="34" rx="3" fill="url(#axmainhappywave400metal)" stroke="#A9BEDC" stroke-width="2.5"></rect>
+<circle cx="272.5" cy="292" r="10" fill="url(#axmainhappywave400metal)" stroke="#A9BEDC" stroke-width="2.5"></circle>
+<rect x="268.5" y="280" width="8" height="10" fill="#1F4478"></rect>
+<path d="M240,328 H290 V366 Q290,386 270,386 H260 Q240,386 240,366 Z" fill="url(#axmainhappywave400pouch)" stroke="#A9BEDC" stroke-width="3" stroke-linejoin="round"></path>
+<path d="M246,344 V364 Q246,380 262,380 H268 Q284,380 284,364 V344" stroke="#FFF1E0" stroke-width="1.5" stroke-dasharray="4 3" fill="none" opacity="0.6"></path>
+<path d="M236,324 H294 V338 Q265,352 236,338 Z" fill="url(#axmainhappywave400belt)" stroke="#A9BEDC" stroke-width="3" stroke-linejoin="round"></path>
+<circle cx="265" cy="341" r="3.5" fill="url(#axmainhappywave400metal)" stroke="#A9BEDC" stroke-width="1.5"></circle>
+
+<g>
+<path d="M162,204 Q178,194 192,203 M208,203 Q222,194 238,204" stroke="#FFFFFF" stroke-width="5" stroke-linecap="round" fill="none"></path>
+</g>
+
+
+
+
+
+
+<g>
+<ellipse cx="178" cy="232" rx="16" ry="20" fill="#FFFFFF" stroke="#A9BEDC" stroke-width="2.5"></ellipse>
+<g transform="translate(0 0)">
+<circle cx="181" cy="236" r="10" fill="#3E7BC4"></circle>
+<circle cx="181" cy="236" r="6" fill="#A9BEDC"></circle>
+<circle cx="184.5" cy="231.5" r="3.2" fill="#FFFFFF"></circle>
+<circle cx="178" cy="240" r="1.6" fill="#FFFFFF"></circle>
+</g>
+</g>
+<g>
+<ellipse cx="222" cy="232" rx="16" ry="20" fill="#FFFFFF" stroke="#A9BEDC" stroke-width="2.5"></ellipse>
+<g transform="translate(0 0)">
+<circle cx="225" cy="236" r="10" fill="#3E7BC4"></circle>
+<circle cx="225" cy="236" r="6" fill="#A9BEDC"></circle>
+<circle cx="228.5" cy="231.5" r="3.2" fill="#FFFFFF"></circle>
+<circle cx="222" cy="240" r="1.6" fill="#FFFFFF"></circle>
+</g>
+</g>
+
+
+
+
+<g>
+<path d="M182,262 Q200,290 218,262 Q200,270 182,262 Z" fill="#4A1626" stroke="#A9BEDC" stroke-width="2" stroke-linejoin="round"></path>
+<path d="M192,277 Q200,284 208,277 Q200,272 192,277 Z" fill="#F07A86"></path>
+</g>
+
+
+
+
+
+
+<g>
+<ellipse cx="154" cy="258" rx="12" ry="8" fill="url(#axmainhappywave400cheek)"></ellipse>
+<ellipse cx="246" cy="258" rx="12" ry="8" fill="url(#axmainhappywave400cheek)"></ellipse>
+</g>
+
+<ellipse cx="200" cy="97" rx="44" ry="6" fill="#A9BEDC" opacity="0.3"></ellipse>
+<path d="M162,86 Q162,42 200,40 Q238,42 238,86 Z" fill="url(#axmainhappywave400hat)" stroke="#A9BEDC" stroke-width="3" stroke-linejoin="round"></path>
+<path d="M193,42 Q200,37 207,42 V84 H193 Z" fill="url(#axmainhappywave400belt)" stroke="#A9BEDC" stroke-width="2" stroke-linejoin="round"></path>
+<path d="M172,72 Q174,54 188,47" stroke="#FFFFFF" stroke-width="4" stroke-linecap="round" fill="none" opacity="0.95"></path>
+<g transform="translate(211 56) rotate(10) scale(0.19)">
+<rect x="0" y="0" width="100" height="100" rx="20" fill="#1C2F5C" stroke="#A9BEDC" stroke-width="8"></rect>
+<path d="M50,15 L83,84 H66 L50,52 L34,84 H17 Z" fill="#FFFFFF" stroke="#FFFFFF" stroke-width="2" stroke-linejoin="round"></path>
+<path d="M17,57 C25,47 32,48 38,54 C44,60 52,62 59,55 C66,48 75,48 84,54" stroke="#E8853A" stroke-width="7" stroke-linecap="round" fill="none"></path>
+</g>
+<path d="M146,86 Q200,74 254,86 Q256,96 246,96 H154 Q144,96 146,86 Z" fill="url(#axmainhappywave400hat)" stroke="#A9BEDC" stroke-width="3" stroke-linejoin="round"></path>
+<path d="M154,92 H246" stroke="#9AA5B4" stroke-width="2" stroke-linecap="round"></path>
+
+<g>
+<g transform="rotate(-18 324 337)">
+<rect x="270" y="324" width="110" height="24" rx="12" fill="#DCE8F7" stroke="#A9BEDC" stroke-width="3"></rect>
+<ellipse cx="372" cy="336" rx="6" ry="11" fill="#B9CDE6" stroke="#A9BEDC" stroke-width="2"></ellipse>
+<path d="M292,336 L356,336" stroke="#1B3A6B" stroke-width="2" stroke-dasharray="6 4"></path>
+</g>
+</g>
+
+<g>
+<ellipse cx="99" cy="184" rx="7" ry="9" fill="url(#axmainhappywave400glove)" stroke="#A9BEDC" stroke-width="2.5"></ellipse>
+<circle cx="84" cy="176" r="17" fill="url(#axmainhappywave400glove)" stroke="#A9BEDC" stroke-width="3"></circle>
+<path d="M78,164 Q80,172 78,180 M88,162 Q90,170 88,178" stroke="#9AA5B4" stroke-width="2" stroke-linecap="round" fill="none"></path>
+<circle cx="313" cy="336" r="17" fill="url(#axmainhappywave400glove)" stroke="#A9BEDC" stroke-width="3"></circle>
+<path d="M306,330 Q312,334 318,330" stroke="#9AA5B4" stroke-width="2" stroke-linecap="round" fill="none"></path>
+</g>
+
+
+
+
+
+
+
+</svg>

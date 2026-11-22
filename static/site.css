@@ -595,3 +595,40 @@ input[type=range].rng{width:100%;accent-color:#E8833A;height:28px}
 .x-empty{text-align:left}
 @media (max-width:1240px){.x-page .ph-g{grid-template-columns:1fr}}
 @media (max-width:640px){.x-page .ph{padding:32px 20px;border-radius:24px;margin:12px 0 48px}.x-page .ph div[style*="flex"] .btn{flex:1 1 100%}}
+/* --- главная: Аксик у примера спецификации, сертификаты, статьи --- */
+.x-spec-wrap{position:relative}
+.x-aks-band{position:absolute;left:-118px;bottom:-72px;width:170px;height:auto;z-index:1;filter:drop-shadow(0 12px 24px rgba(0,0,0,.35))}
+.x-spec{position:relative;z-index:2}
+.x-off{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.2fr);gap:48px;align-items:start}
+.x-certs{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
+.x-cert{display:flex;flex-direction:column;gap:6px;text-decoration:none;color:var(--ink)}
+.x-cert-img{display:block;aspect-ratio:1/1.41;border-radius:16px;overflow:hidden;background:#fff;box-shadow:inset 0 0 0 1px var(--line);margin-bottom:8px;transition:transform .15s,box-shadow .15s}
+.x-cert:hover .x-cert-img{transform:translateY(-2px);box-shadow:inset 0 0 0 1px var(--field),var(--sh-card)}
+.x-cert-img img{width:100%;height:100%;object-fit:cover;object-position:top}
+.x-cert b{font-size:15px;font-weight:700;line-height:20px}
+.x-cert>span:last-child{font-size:13px;color:var(--muted)}
+.x-arts{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
+.x-art{display:flex;flex-direction:column;gap:10px;padding:28px;border-radius:24px;background:var(--surface);box-shadow:inset 0 0 0 1px var(--line);text-decoration:none;color:var(--ink);min-height:240px;transition:box-shadow .15s,transform .15s}
+.x-art:hover{box-shadow:inset 0 0 0 1px var(--field),var(--sh-card);transform:translateY(-2px)}
+.x-art-b{font-size:28px;font-weight:500;letter-spacing:-.02em;color:#8494AE;margin-bottom:auto}
+.x-art b{font-size:19px;line-height:25px;font-weight:700;margin-top:24px}
+.x-art>span:nth-of-type(2){font-size:14px;line-height:21px;color:var(--muted)}
+.x-art-go{display:inline-flex;align-items:center;gap:6px;font-size:14px;font-weight:700;margin-top:6px}
+/* --- Аксик-помощник на всех страницах --- */
+.aks-h{position:fixed;right:24px;bottom:24px;z-index:40;display:flex;flex-direction:column;align-items:flex-end;gap:12px}
+.aks-b{width:64px;height:64px;border-radius:50%;border:0;padding:0;cursor:pointer;background:radial-gradient(circle at 50% 30%,#1C2E52,#060B17);box-shadow:0 10px 30px rgba(6,11,23,.35),inset 0 0 0 1px rgba(255,255,255,.14);overflow:hidden;transition:transform .15s}
+.aks-b:hover{transform:translateY(-2px) scale(1.03)}
+.aks-b img{width:64px;height:64px;display:block;margin-top:4px}
+.aks-p{width:300px;background:var(--x-night);color:var(--x-ink-d);border-radius:20px;padding:16px;box-shadow:0 20px 50px rgba(6,11,23,.4),inset 0 0 0 1px var(--x-line-d);display:grid;gap:4px}
+.aks-p[hidden]{display:none}
+.aks-hi{margin:0 0 8px;font-size:14px;line-height:20px;color:var(--x-mute-d)}
+.aks-hi b{display:block;color:var(--x-ink-d);font-size:15px}
+.aks-p a{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:12px;color:var(--x-ink-d);text-decoration:none;font-size:14px;font-weight:600}
+.aks-p a:hover{background:rgba(255,255,255,.08)}
+.aks-p a .ic{color:#F7B27A;flex:none}
+@media (max-width:1240px){.x-off{grid-template-columns:1fr}.x-aks-band{display:none}.x-arts{grid-template-columns:1fr 1fr}}
+@media (max-width:640px){.x-certs{grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}.x-cert b{font-size:12px;line-height:16px}.x-arts{grid-template-columns:1fr}.x-art{min-height:0;padding:22px}.aks-h{right:16px;bottom:88px}.aks-b,.aks-b img{width:56px;height:56px}.aks-p{width:calc(100vw - 32px)}}
+@media print{.aks-h{display:none}}
+.x-certs-page{grid-template-columns:repeat(4,minmax(0,1fr));gap:20px}
+@media (max-width:1240px){.x-certs-page{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media (max-width:640px){.x-certs-page{grid-template-columns:1fr 1fr}}

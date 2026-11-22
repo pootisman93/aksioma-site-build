@@ -237,5 +237,16 @@
 "static/products.json": "static/products.json",
 "static/search.json": "static/search.json",
 "static/img/favicon.svg": "static/img/favicon.svg",
-"static/img/og.png": "static/img/og.png"
+"static/img/og.png": "static/img/og.png",
+"static/img/aksik/klass-d.svg": "static/img/aksik/klass-d.svg",
+"static/img/aksik/pokazyvaet.svg": "static/img/aksik/pokazyvaet.svg",
+"static/img/aksik/razvodit.svg": "static/img/aksik/razvodit.svg",
+"static/img/aksik/razvodit-d.svg": "static/img/aksik/razvodit-d.svg",
+"static/img/aksik/head-d.svg": "static/img/aksik/head-d.svg",
+"static/img/aksik/mashet-d.svg": "static/img/aksik/mashet-d.svg",
+"static/img/aksik/chertezh.svg": "static/img/aksik/chertezh.svg",
+"static/img/aksik/klass.svg": "static/img/aksik/klass.svg",
+"static/img/aksik/mashet.svg": "static/img/aksik/mashet.svg",
+"static/img/aksik/pokazyvaet-d.svg": "static/img/aksik/pokazyvaet-d.svg",
+"static/img/aksik/chertezh-d.svg": "static/img/aksik/chertezh-d.svg"
 }

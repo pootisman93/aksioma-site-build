@@ -422,4 +422,13 @@
     // сохранённый вход ещё действует? заодно подтягиваем профиль
     if (AUTH.token) authApi({ action: 'me', token: AUTH.token }).then(function (j) { AUTH.user = j.user; saveAuth(); show(); }, function (er) { if (er.status === 401) { AUTH.token = ''; AUTH.user = null; saveAuth(); show(); } });
   }
+  /* ---------- Аксик-помощник ---------- */
+  var aks = $('[data-aks]');
+  if (aks) {
+    var ab = $('[data-aks-btn]', aks), ap = $('#aks-panel');
+    var setAks = function (open) { ap.hidden = !open; ab.setAttribute('aria-expanded', open ? 'true' : 'false'); aks.classList.toggle('on', open); };
+    ab.addEventListener('click', function (e) { e.stopPropagation(); setAks(ap.hidden); if (!ap.hidden) goal('aksik_open'); });
+    document.addEventListener('click', function (e) { if (!aks.contains(e.target)) setAks(false); });
+    document.addEventListener('keydown', function (e) { if (e.key === 'Escape') setAks(false); });
+  }
 })();
