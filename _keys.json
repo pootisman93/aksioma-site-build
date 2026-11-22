@@ -275,5 +275,8 @@
 "static/img/art/stat-4.svg": "static/img/art/stat-4.svg",
 "static/fonts/manrope-lat.woff": "static/fonts/manrope-lat.woff",
 "static/fonts/manrope-cyr.woff": "static/fonts/manrope-cyr.woff",
-"static/fonts/Manrope-OFL.txt": "static/fonts/Manrope-OFL.txt"
+"static/fonts/Manrope-OFL.txt": "static/fonts/Manrope-OFL.txt",
+"_fn/forms.zip": "_fn/forms.zip",
+"_fn/deploy.zip": "_fn/deploy.zip",
+"_fn/monitor.zip": "_fn/monitor.zip"
 }
