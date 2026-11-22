@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 240" role="img" aria-label="Тихий кондиционер в спальне ночью">
+<defs>
+<linearGradient id="wall" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#F2F6FC"/><stop offset="1" stop-color="#DCE6F3"/></linearGradient>
+<linearGradient id="unit" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#FFFFFF"/><stop offset="1" stop-color="#EEF3FA"/></linearGradient>
+</defs>
+<rect x="0" y="0" width="400" height="240" fill="url(#wall)"/>
+<rect x="0" y="196" width="400" height="44" fill="#C9D8EE"/>
+<!-- кондиционер -->
+<rect x="40" y="38" width="170" height="52" rx="14" fill="url(#unit)" stroke="#8FA7C9" stroke-width="1.5"/>
+<path d="M56 78 H194" stroke="#1B2F55" stroke-width="3" stroke-linecap="round"/>
+<circle cx="190" cy="54" r="2.5" fill="#4FC3F7"/>
+<!-- затухающие волны звука -->
+<g fill="none" stroke-linecap="round">
+<path d="M226 50 C236 58 236 72 226 80" stroke="#2F6BFF" stroke-width="3"/>
+<path d="M242 42 C258 56 258 74 242 88" stroke="#2F6BFF" stroke-width="3" opacity=".5"/>
+<path d="M258 34 C280 54 280 76 258 96" stroke="#2F6BFF" stroke-width="3" opacity=".22"/>
+</g>
+<!-- кровать -->
+<rect x="70" y="150" width="220" height="40" rx="10" fill="#FFFFFF" stroke="#A9BEDC" stroke-width="1.5"/>
+<rect x="82" y="136" width="58" height="24" rx="10" fill="#EAF0F8" stroke="#A9BEDC" stroke-width="1.3"/>
+<path d="M150 150 H290 V176 H150 Z" fill="#DDE7F5"/>
+<rect x="62" y="128" width="12" height="70" rx="4" fill="#1B2F55"/>
+<path d="M80 190 V200 M282 190 V200" stroke="#1B2F55" stroke-width="4" stroke-linecap="round"/>
+<!-- zZ -->
+<text x="160" y="128" font-family="Manrope,Arial,sans-serif" font-size="18" font-weight="700" fill="#8FA7C9">z</text>
+<text x="174" y="114" font-family="Manrope,Arial,sans-serif" font-size="22" font-weight="700" fill="#A9BEDC">Z</text>
+<!-- окно с луной -->
+<rect x="318" y="34" width="58" height="76" rx="6" fill="#1B2F55"/>
+<path d="M352 58 a12 12 0 1 0 10 18 a10 10 0 1 1 -10 -18z" fill="#FFE7CF"/>
+<circle cx="332" cy="48" r="1.5" fill="#fff"/><circle cx="364" cy="96" r="1.2" fill="#fff"/>
+<!-- шкала дБ -->
+<g transform="translate(318 132)">
+<rect x="0" y="40" width="10" height="16" rx="3" fill="#4FC3F7"/>
+<rect x="15" y="30" width="10" height="26" rx="3" fill="#4FC3F7"/>
+<rect x="30" y="18" width="10" height="38" rx="3" fill="#C9D8EE"/>
+<rect x="45" y="6" width="10" height="50" rx="3" fill="#C9D8EE"/>
+</g>
+</svg>

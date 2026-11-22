@@ -159,7 +159,7 @@
         msg.className = 'fmsg err'; (telEl || mailEl).focus(); return;
       }
       var payload = { form: form.getAttribute('data-form'), page: location.pathname, title: document.title, fields: fields, ref: document.referrer || '' };
-      if (form.hasAttribute('data-cart-form')) payload.items = cart();
+      if (form.hasAttribute('data-cart-form')) { payload.items = cart(); var cn = store.get('ax-calc', ''); if (cn && payload.items.length) payload.fields['Расчёт'] = cn; }
       btn.disabled = true; var old = btn.textContent; btn.textContent = 'Отправляем…';
       readFiles($('input[type=file]', form)).then(function (files) {
         payload.files = files;
@@ -170,7 +170,7 @@
         if (window.__axSent) window.__axSent({ at: Date.now(), name: (form.closest('section, .card, main') && (form.closest('section, .card, main').querySelector('h2, h1') || {}).textContent || document.title).trim().slice(0, 80), page: location.pathname, items: payload.items ? payload.items.length : 0 });
         msg.textContent = 'Спасибо, заявка отправлена. Менеджер свяжется с вами в рабочее время.'; msg.className = 'fmsg ok';
         form.reset(); $$('.drop', form).forEach(function (d) { d.classList.remove('has'); var t = d.querySelector('[data-drop-t]'); if (t) t.textContent = ''; });
-        if (payload.items) { saveCart([]); }
+        if (payload.items) { saveCart([]); store.set('ax-calc', ''); }
       }).catch(function (err) {
         msg.textContent = err && err.message === 'big' ? 'Файлы больше 2,5 МБ — отправьте их на Info@aksioma-vent.ru.' :
           err && err.message === 'noendpoint' ? 'Тестовый режим: формы ещё не подключены. Позвоните +7 916 244 85 50 или напишите на Info@aksioma-vent.ru.' :
@@ -227,10 +227,95 @@
     apply();
   }
 
+  /* ---------- уведомление о cookie ---------- */
+  var ck = $('[data-ck].ck');
+  if (ck && !store.get('ax-cookie', '')) {
+    setTimeout(function () { ck.classList.remove('hidden'); }, 600);
+    $$('button[data-ck]', ck).forEach(function (b) {
+      b.addEventListener('click', function () {
+        var v = b.getAttribute('data-ck'); store.set('ax-cookie', v); ck.classList.add('hidden');
+        if (v === 'min') { try { if (window.ym && CFG.metrika) window.ym(+CFG.metrika, 'destruct'); } catch (e) {} toast('Аналитика отключена для этого браузера'); }
+      });
+    });
+  }
+
+  /* ---------- сравнение моделей ---------- */
+  var CMP = 'ax-cmp', CMP_MAX = 4;
+  var CMP_IC = '<svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 4v16M16 4v16M4 8h8M12 16h8"/></svg>';
+  function cmpList() { return store.get(CMP, []); }
+  function cmpHas(id) { return cmpList().indexOf(String(id)) > -1; }
+  function cmpSet(l) { store.set(CMP, l); cmpSync(); }
+  function cmpToggle(id) {
+    id = String(id); var l = cmpList(), i = l.indexOf(id);
+    if (i > -1) l.splice(i, 1);
+    else { if (l.length >= CMP_MAX) { toast('Сравнить можно до ' + CMP_MAX + ' моделей. <a href="/sravnenie">Открыть сравнение</a>'); return; } l.push(id); goal('compare_add'); }
+    cmpSet(l);
+    if (i < 0 && l.length > 1) toast('Добавлено к сравнению <a href="/sravnenie">Сравнить ' + l.length + '</a>');
+  }
+  var cmpBar = document.createElement('a');
+  cmpBar.className = 'cmp-bar hidden'; cmpBar.href = '/sravnenie';
+  function cmpSync() {
+    var l = cmpList();
+    $$('[data-cmp]').forEach(function (b) { b.setAttribute('aria-pressed', l.indexOf(b.getAttribute('data-cmp')) > -1 ? 'true' : 'false'); });
+    cmpBar.innerHTML = CMP_IC + '<span>Сравнение: ' + l.length + '</span>';
+    cmpBar.classList.toggle('hidden', !l.length || location.pathname === '/sravnenie');
+  }
+  document.body.appendChild(cmpBar);
+  document.addEventListener('click', function (e) { var b = e.target.closest('[data-cmp]'); if (b) { e.preventDefault(); cmpToggle(b.getAttribute('data-cmp')); } });
+  cmpSync();
+
+  var cmpBox = $('[data-cmp-page]');
+  if (cmpBox) {
+    var onlyDiff = false;
+    fetch('/static/compare.json').then(function (r) { return r.json(); }).then(function (all) {
+      function draw() {
+        var ids = cmpList().filter(function (id) { return all[id]; }), items = ids.map(function (id) { return all[id]; });
+        $('[data-cmp-empty]').classList.toggle('hidden', !!items.length);
+        $('[data-cmp-tools]').classList.toggle('hidden', !items.length);
+        if (!items.length) { cmpBox.innerHTML = ''; return; }
+        var keys = [];
+        items.forEach(function (p) { p.ch.forEach(function (r) { if (keys.indexOf(r[0]) < 0) keys.push(r[0]); }); });
+        var head = '<tr><th scope="col"><span class="sr">Характеристика</span></th>' + items.map(function (p, i) {
+          return '<th scope="col"><div class="cmp-h"><button class="cmp-x" type="button" data-cmp-del="' + esc(ids[i]) + '" aria-label="Убрать из сравнения">×</button>' +
+            '<a class="cmp-img" href="' + esc(p.u) + '">' + (p.img ? '<img src="' + esc(p.img) + '" alt="" loading="lazy">' : '') + '</a>' +
+            '<a class="cmp-n" href="' + esc(p.u) + '">' + esc(p.t) + '</a><b class="cmp-p">' + (p.p ? fmt(p.p) + ' ₽' : 'Цена по запросу') + '</b>' +
+            '<button class="btn btn-p btn-s" type="button" data-cmp-add="' + esc(ids[i]) + '">В заявку</button></div></th>';
+        }).join('') + '</tr>';
+        var body = keys.map(function (k) {
+          var vals = items.map(function (p) { var r = p.ch.filter(function (x) { return x[0] === k; })[0]; return r ? r[1] : '—'; });
+          var same = vals.every(function (v) { return v === vals[0]; });
+          if (onlyDiff && same && items.length > 1) return '';
+          return '<tr' + (same || items.length < 2 ? '' : ' class="diff"') + '><th scope="row">' + esc(k) + '</th>' + vals.map(function (v) { return '<td>' + esc(v) + '</td>'; }).join('') + '</tr>';
+        }).join('');
+        cmpBox.innerHTML = '<div class="tbl-w cmp-w"><table class="tbl cmp"><thead>' + head + '</thead><tbody>' + body + '</tbody></table></div>';
+      }
+      cmpBox.addEventListener('click', function (e) {
+        var d = e.target.closest('[data-cmp-del]'); if (d) { var l = cmpList(); l.splice(l.indexOf(d.getAttribute('data-cmp-del')), 1); cmpSet(l); draw(); return; }
+        var a = e.target.closest('[data-cmp-add]'); if (a) { var p = all[a.getAttribute('data-cmp-add')]; addToCart({ id: p.id, t: p.t, u: p.u, p: p.p, img: p.img }, 1); }
+      });
+      var od = $('[data-cmp-diff]'); if (od) od.addEventListener('change', function () { onlyDiff = od.checked; draw(); });
+      var cl = $('[data-cmp-clear]'); if (cl) cl.addEventListener('click', function () { cmpSet([]); draw(); });
+      draw();
+    });
+  }
+
   /* ---------- калькулятор ---------- */
   var calc = $('[data-calc]');
   if (calc) {
-    var st = { mode: location.hash === '#conv' ? 'conv' : 'ac', s: 20, h: 2.7, sun: 35, people: 1, pc: 1, tv: 0, ins: 100 }, PRODUCTS = null;
+    var st = { mode: location.hash === '#conv' ? 'conv' : 'ac', s: 20, h: 2.7, sun: 35, people: 1, pc: 1, tv: 0, ins: 100, inv: 'all' }, PRODUCTS = null, lastQ = 0;
+    $$('[data-inv]', calc).forEach(function (a) { a.addEventListener('click', function (e) { e.preventDefault(); st.inv = a.getAttribute('data-inv'); seg(a); calcRun(); }); });
+    function calcNote() {
+      return st.mode === 'ac'
+        ? 'Расчёт калькулятора: комната ' + st.s + ' м², потолок ' + kw(st.h) + ' м, людей ' + st.people + ', ПК ' + st.pc + ', ТВ ' + st.tv + ' → нужно около ' + kw(lastQ) + ' кВт холода'
+        : 'Расчёт калькулятора: комната ' + st.s + ' м², потолок ' + kw(st.h) + ' м → нужно около ' + kw(lastQ) + ' кВт тепла';
+    }
+    calc.addEventListener('click', function (e) {
+      var b = e.target.closest('[data-calc-add]'); if (!b || !PRODUCTS) return;
+      var p = PRODUCTS.filter(function (x) { return String(x.id) === b.getAttribute('data-calc-add'); })[0]; if (!p) return;
+      store.set('ax-calc', calcNote());
+      addToCart({ id: p.id, t: p.t, u: p.u, p: p.p, img: p.img }, 1);
+      goal('calc_add');
+    });
     fetch('/static/products.json').then(function (r) { return r.json(); }).then(function (d) { PRODUCTS = d; calcRun(); });
     $$('[data-in]', calc).forEach(function (el) { el.addEventListener('input', function () { st[el.getAttribute('data-in')] = +el.value; calcRun(); }); });
     $$('[data-sun]', calc).forEach(function (a) { a.addEventListener('click', function (e) { e.preventDefault(); st.sun = +a.getAttribute('data-sun'); seg(a); calcRun(); }); });
@@ -254,7 +339,7 @@
         var sizes = [['07', 2.1], ['09', 2.6], ['12', 3.5], ['18', 5.3], ['24', 7.0]], pick = null;
         for (var i = 0; i < sizes.length; i++) if (sizes[i][1] >= Q) { pick = sizes[i]; break; }
         hint = pick ? 'Подойдёт типоразмер <b style="color: var(--band-ink);">' + pick[0] + '</b> — около ' + kw(pick[1]) + ' кВт' : 'Больше 7 кВт — нужен мульти-сплит или полупромышленная система. <a href="/katalog/polupromyshlennye-kondicionery" style="color:#F7B27A">Подберём</a>';
-        if (PRODUCTS && pick) list = PRODUCTS.filter(function (p) { return p.sec === 'split' && p.z === pick[0]; }).sort(function (a, b) { return (a.p || 1e9) - (b.p || 1e9); }).slice(0, 4);
+        if (PRODUCTS && pick) list = PRODUCTS.filter(function (p) { return p.sec === 'split' && p.z === pick[0] && (st.inv === 'all' || (st.inv === 'inv') === !!p.inv); }).sort(function (a, b) { return (a.p || 1e9) - (b.p || 1e9); }).slice(0, 6);
         all.href = '/katalog/326672621123-split-sistemi' + (pick ? '?size=' + pick[0] : '');
       } else {
         Q = st.s * st.ins / 1000 * Math.max(1, st.h / 2.7);
@@ -262,16 +347,24 @@
         if (PRODUCTS) {
           var cands = PRODUCTS.filter(function (p) { return p.sec === 'nobo' && p.kw; });
           var one = cands.filter(function (p) { return p.kw >= Q; }).sort(function (a, b) { return a.kw - b.kw || (a.p || 0) - (b.p || 0); });
-          if (one.length) list = one.slice(0, 4);
+          if (one.length) list = one.slice(0, 6);
           else { var big = cands.sort(function (a, b) { return b.kw - a.kw; })[0]; if (big) { var n = Math.ceil(Q / big.kw); hint = 'Понадобится ' + n + ' ' + plural(n, 'конвектор', 'конвектора', 'конвекторов') + ' по ' + kw(big.kw) + ' кВт или больше.'; list = [big]; } }
         }
         all.href = '/katalog/654662302513-konvektori-nobo';
       }
+      lastQ = Q;
+      $$('[data-inv-wrap]', calc).forEach(function (x) { x.classList.toggle('hidden', st.mode !== 'ac'); });
       $('[data-res]', calc).textContent = kw(Q);
       $('[data-res-hint]', calc).innerHTML = hint;
       var box = $('[data-res-list]', calc);
       box.innerHTML = list.length ? list.map(function (p) {
-        return '<a class="row-l" href="' + esc(p.u) + '" style="grid-template-columns: minmax(0,1fr) auto; padding: 14px 0; text-decoration: none; color: var(--ink);"><span><b style="display: block;">' + esc(p.s) + '</b><span class="muted" style="font-size: 13px;">' + (p.kw ? kw(p.kw) + ' кВт' : '') + (p.a ? ', ' + esc(p.a) : '') + '</span></span><span class="price" style="font-size: 17px;">' + (p.p ? fmt(p.p) + ' ₽' : 'по запросу') + '</span></a>';
+        var img = p.img ? '<img src="' + esc(p.img) + '" alt="" loading="lazy">' : '';
+        var meta = [p.kw ? kw(p.kw) + ' кВт' : '', p.sec === 'split' ? (p.inv ? 'инвертор' : 'on/off') : '', p.a || ''].filter(Boolean).join(' · ');
+        return '<div class="cr"><a class="cr-img" href="' + esc(p.u) + '" tabindex="-1" aria-hidden="true">' + img + '</a>' +
+          '<div class="cr-b"><a class="cr-n" href="' + esc(p.u) + '">' + esc(p.s) + '</a><span class="cr-m">' + esc(meta) + '</span>' +
+          '<span class="cr-p">' + (p.p ? fmt(p.p) + ' ₽' : 'Цена по запросу') + '</span></div>' +
+          '<div class="cr-a"><button class="btn btn-p btn-s" type="button" data-calc-add="' + esc(p.id) + '">В заявку</button>' +
+          '<button class="cmp-t" type="button" data-cmp="' + esc(p.id) + '" aria-pressed="' + (cmpHas(p.id) ? 'true' : 'false') + '" title="Добавить к сравнению">' + CMP_IC + '<span>Сравнить</span></button></div></div>';
       }).join('') : '<p class="ps">Подберём модель по запросу.</p>';
     }
     calcRun();

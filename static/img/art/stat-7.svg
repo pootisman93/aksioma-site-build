@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 240" role="img" aria-label="Чистка фильтра кондиционера">
+<defs>
+<linearGradient id="u" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#FFFFFF"/><stop offset="1" stop-color="#EEF3FA"/></linearGradient>
+<pattern id="mesh" width="8" height="8" patternUnits="userSpaceOnUse"><path d="M0 0 L8 8 M8 0 L0 8" stroke="#A9BEDC" stroke-width=".8"/></pattern>
+</defs>
+<!-- внутренний блок с открытой панелью -->
+<rect x="40" y="70" width="200" height="66" rx="14" fill="url(#u)" stroke="#8FA7C9" stroke-width="1.5"/>
+<path d="M56 124 H224" stroke="#1B2F55" stroke-width="3" stroke-linecap="round"/>
+<path d="M44 72 L60 30 H228 L236 72" fill="#F7FAFE" stroke="#8FA7C9" stroke-width="1.5" stroke-linejoin="round"/>
+<g stroke="#C9D8EE" stroke-width="2"><path d="M64 84 V114"/><path d="M80 84 V114"/><path d="M96 84 V114"/><path d="M112 84 V114"/><path d="M128 84 V114"/><path d="M144 84 V114"/><path d="M160 84 V114"/><path d="M176 84 V114"/><path d="M192 84 V114"/><path d="M208 84 V114"/></g>
+<!-- вынутый фильтр -->
+<g transform="rotate(-8 300 150)">
+<rect x="236" y="120" width="128" height="62" rx="8" fill="#FFFFFF" stroke="#1B2F55" stroke-width="2"/>
+<rect x="246" y="130" width="108" height="42" rx="4" fill="url(#mesh)"/>
+<path d="M300 130 V172" stroke="#1B2F55" stroke-width="2"/>
+</g>
+<!-- капли воды -->
+<g fill="#4FC3F7">
+<path d="M290 70 C296 80 300 86 300 91 a10 10 0 0 1 -20 0 C280 86 284 80 290 70z"/>
+<path d="M326 88 C330 95 333 99 333 103 a7 7 0 0 1 -14 0 C319 99 322 95 326 88z" opacity=".75"/>
+<path d="M262 92 C265 97 267 100 267 103 a5 5 0 0 1 -10 0 C257 100 259 97 262 92z" opacity=".55"/>
+</g>
+<!-- блеск чистоты -->
+<g stroke="#E8833A" stroke-width="2.5" stroke-linecap="round">
+<path d="M372 104 V120 M364 112 H380"/>
+<path d="M226 196 V206 M221 201 H231" opacity=".7"/>
+</g>
+<!-- галочка -->
+<circle cx="88" cy="188" r="20" fill="#E7F6EE"/>
+<path d="M78 188 L86 196 L100 180" stroke="#067647" stroke-width="3.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+<rect x="118" y="178" width="84" height="8" rx="4" fill="#C9D8EE"/>
+<rect x="118" y="192" width="56" height="8" rx="4" fill="#DDE7F5"/>
+</svg>

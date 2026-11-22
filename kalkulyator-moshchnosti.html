@@ -17,10 +17,8 @@
 <meta name="ax-forms" content="https://functions.yandexcloud.net/d4eapejqjj24ihebaa3e">
 <meta name="theme-color" content="#1B2F55">
 <link rel="icon" href="/static/img/favicon.svg" type="image/svg+xml">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="/static/site.css?v=202611221826">
+<link rel="preload" href="/static/fonts/manrope-cyr.woff" as="font" type="font/woff" crossorigin>
+<link rel="stylesheet" href="/static/site.css?v=202611221939">
 <script>try{var t=localStorage.getItem('ax-theme');if(t==='dark'||(!t&&window.matchMedia&&matchMedia('(prefers-color-scheme: dark)').matches)){document.documentElement.className='ax dark'}}catch(e){}</script>
 <script type="application/ld+json">{"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "item": "https://new.aksioma-vent.ru/", "name": "\u0413\u043b\u0430\u0432\u043d\u0430\u044f", "position": 1}, {"@type": "ListItem", "item": "https://new.aksioma-vent.ru/kalkulyator-moshchnosti", "name": "\u041a\u0430\u043b\u044c\u043a\u0443\u043b\u044f\u0442\u043e\u0440 \u043c\u043e\u0449\u043d\u043e\u0441\u0442\u0438", "position": 2}]}</script>
 
@@ -183,8 +181,9 @@
 <p class="muted" style="margin: 10px 0 0; font-size: 15px;" data-res-hint></p>
 </div>
 <div class="card-s">
-<b>Подходящие модели</b>
-<div style="display: flex; flex-direction: column; margin-top: 8px;" data-res-list></div>
+<div style="display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap;"><b>Подходящие модели</b><div class="seg seg-s" role="radiogroup" aria-label="Тип кондиционера" data-inv-wrap><a class="on" href="#" role="radio" aria-checked="true" data-inv="all">Все</a><a href="#" role="radio" aria-checked="false" data-inv="inv">Инвертор</a><a href="#" role="radio" aria-checked="false" data-inv="onoff">On/off</a></div></div>
+<div class="cr-list" data-res-list></div>
+<p class="ps" style="margin: 10px 0 0;">Расчёт попадёт в заявку вместе с моделью — менеджер проверит подбор.</p>
 <div style="display: flex; gap: 10px; margin-top: 14px; flex-wrap: wrap;"><a class="btn btn-p btn-s" href="/katalog/326672621123-split-sistemi" data-res-all>Все подходящие модели</a><a class="btn btn-o btn-s" href="/kontakty">Запросить подбор</a></div>
 </div>
 </div>
@@ -238,7 +237,11 @@
 
 <script>window.AX={site:{"analog": "https://analog.aksioma-vent.ru", "auth": "https://functions.yandexcloud.net/d4eaf60b60tqqrhiki5d", "forms": "https://functions.yandexcloud.net/d4eapejqjj24ihebaa3e", "metrika": ""}};</script>
 
-<script src="/static/app.js?v=202611221826" defer></script>
+<script src="/static/app.js?v=202611221939" defer></script>
 
+<div class="ck hidden" role="region" aria-label="Уведомление о cookie" data-ck>
+<p>Сайт использует cookie и Яндекс Метрику, чтобы работать и становиться удобнее. Подробнее — в <a href="/privacy">политике конфиденциальности</a>.</p>
+<div class="ck-a"><button class="btn btn-p btn-s" type="button" data-ck="all">Понятно</button><button class="ck-min" type="button" data-ck="min">Без аналитики</button></div>
+</div>
 </body>
 </html>

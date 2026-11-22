@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 240" role="img" aria-label="Схема монтажа: внутренний блок, стена, трасса и наружный блок">
+<defs>
+<linearGradient id="room" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#F7FAFE"/><stop offset="1" stop-color="#E3EBF6"/></linearGradient>
+<linearGradient id="u" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#FFFFFF"/><stop offset="1" stop-color="#EEF3FA"/></linearGradient>
+<pattern id="brick" width="20" height="12" patternUnits="userSpaceOnUse"><rect width="20" height="12" fill="#DCE6F3"/><path d="M0 12 H20 M10 0 V6 M0 6 H20 M20 6 V12 M0 6 V12" stroke="#B4C8E6" stroke-width="1"/></pattern>
+</defs>
+<rect x="0" y="0" width="226" height="240" fill="url(#room)"/>
+<rect x="226" y="0" width="34" height="240" fill="url(#brick)"/>
+<path d="M226 0 V240 M260 0 V240" stroke="#A9BEDC" stroke-width="1.5"/>
+<!-- внутренний блок -->
+<rect x="44" y="40" width="160" height="48" rx="12" fill="url(#u)" stroke="#8FA7C9" stroke-width="1.5"/>
+<path d="M60 76 H188" stroke="#1B2F55" stroke-width="3" stroke-linecap="round"/>
+<!-- трасса -->
+<path d="M196 70 H243 V128 H300" stroke="#E8833A" stroke-width="3" fill="none" stroke-dasharray="7 6" stroke-linecap="round"/>
+<path d="M190 82 C196 120 200 150 208 196" stroke="#4FC3F7" stroke-width="2.5" fill="none" stroke-dasharray="3 5" stroke-linecap="round"/>
+<path d="M203 190 L208 198 L213 190" stroke="#4FC3F7" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+<!-- метка длины -->
+<rect x="262" y="88" width="24" height="24" rx="12" fill="#E8833A"/>
+<text x="274" y="105" text-anchor="middle" font-family="Manrope,Arial,sans-serif" font-size="13" font-weight="700" fill="#fff">L</text>
+<!-- кронштейн и наружный блок -->
+<path d="M260 176 H372 M268 176 L300 146" stroke="#1B2F55" stroke-width="4" stroke-linecap="round"/>
+<rect x="290" y="110" width="96" height="64" rx="8" fill="url(#u)" stroke="#8FA7C9" stroke-width="1.5"/>
+<circle cx="326" cy="142" r="22" fill="#F7FAFE" stroke="#A9BEDC" stroke-width="1.4"/>
+<g stroke="#A9BEDC" stroke-width="1.2"><path d="M304 142 H348"/><path d="M326 120 V164"/></g>
+<circle cx="326" cy="142" r="5" fill="#1B2F55"/>
+<rect x="358" y="122" width="18" height="40" rx="3" fill="#E6EEF8"/>
+<!-- розетка/электрика -->
+<rect x="58" y="140" width="34" height="34" rx="8" fill="#FFFFFF" stroke="#A9BEDC" stroke-width="1.5"/>
+<circle cx="69" cy="157" r="2.6" fill="#1B2F55"/><circle cx="81" cy="157" r="2.6" fill="#1B2F55"/>
+<path d="M75 140 V100 H120 V88" stroke="#8FA7C9" stroke-width="1.8" fill="none" stroke-dasharray="2 4"/>
+</svg>
