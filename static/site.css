@@ -618,7 +618,7 @@ input[type=range].rng{width:100%;accent-color:#E8833A;height:28px}
 .aks-h{position:fixed;right:24px;bottom:24px;z-index:40;display:flex;flex-direction:column;align-items:flex-end;gap:12px}
 .aks-b{width:64px;height:64px;border-radius:50%;border:0;padding:0;cursor:pointer;background:radial-gradient(circle at 50% 30%,#1C2E52,#060B17);box-shadow:0 10px 30px rgba(6,11,23,.35),inset 0 0 0 1px rgba(255,255,255,.14);overflow:hidden;transition:transform .15s}
 .aks-b:hover{transform:translateY(-2px) scale(1.03)}
-.aks-b img{width:64px;height:64px;display:block;margin-top:4px}
+.aks-b img{width:64px;height:64px;display:block;margin-top:6px}
 .aks-p{width:300px;background:var(--x-night);color:var(--x-ink-d);border-radius:20px;padding:16px;box-shadow:0 20px 50px rgba(6,11,23,.4),inset 0 0 0 1px var(--x-line-d);display:grid;gap:4px}
 .aks-p[hidden]{display:none}
 .aks-hi{margin:0 0 8px;font-size:14px;line-height:20px;color:var(--x-mute-d)}
