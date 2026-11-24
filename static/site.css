@@ -723,3 +723,7 @@ input[type=range].rng{width:100%;accent-color:#E8833A;height:28px}
 .x-card-d:hover .x-srv-img{transform:scale(1.04)}
 @media (max-width:640px){.x-srv-img{max-height:170px}}
 @media (min-width:1241px){.x-card-d>span:not(.x-q-ic):not(.x-glow-s):not(.x-go){min-height:60px}}
+/* ---------- иллюстрация первого экрана: чиллер, сплит, клапан, конвектор (2026-11-24) ---------- */
+.x-hero-art{position:absolute;right:-8px;top:-64px;width:min(600px,46%);z-index:1}
+.x-hero-svg{display:block;width:100%;height:auto;overflow:visible}
+@media (max-width:1099px){.x-hero-art{display:none}}
