@@ -727,3 +727,12 @@ input[type=range].rng{width:100%;accent-color:#E8833A;height:28px}
 .x-hero-art{position:absolute;right:-8px;top:-64px;width:min(600px,46%);z-index:1}
 .x-hero-svg{display:block;width:100%;height:auto;overflow:visible}
 @media (max-width:1099px){.x-hero-art{display:none}}
+/* ---------- иллюстрированные значки в меню (2026-11-24) ---------- */
+.dd{min-width:320px}
+.dd a{gap:14px;padding:8px 12px 8px 8px}
+.dd .ico-m{width:52px;height:52px;border-radius:14px;background:#EEF3FA;transition:transform .2s cubic-bezier(.2,.8,.2,1)}
+.dd a:hover .ico-m{transform:scale(1.06)}
+.dark .dd .ico-m{background:#22355C}
+.mnav details a.mn-a{display:flex;align-items:center;gap:12px;padding:10px 16px}
+.mn-ic{flex:none;width:36px;height:36px;padding:3px;border-radius:10px;background:#EEF3FA;box-sizing:border-box}
+.dark .mn-ic{background:#22355C}
