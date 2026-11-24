@@ -184,9 +184,9 @@
   $$('[data-filters]').forEach(function (d) { if (window.innerWidth > 1240) d.open = true; });
   var grid = $('[data-grid]');
   if (grid) {
-    var cards = $$('[data-p]', grid), state = { brand: [], inv: [], size: [], pmin: '', pmax: '' }, sortSel = $('[data-sort]');
+    var cards = $$('[data-p]', grid), state = { brand: [], inv: [], size: [], kind: [], kwb: [], pmin: '', pmax: '' }, sortSel = $('[data-sort]');
     var qs = new URLSearchParams(location.search);
-    ['brand', 'inv', 'size'].forEach(function (k) { if (qs.get(k)) state[k] = qs.get(k).split(','); });
+    ['brand', 'inv', 'size', 'kind', 'kwb'].forEach(function (k) { if (qs.get(k)) state[k] = qs.get(k).split(','); });
     ['pmin', 'pmax'].forEach(function (k) { state[k] = qs.get(k) || ''; });
     $$('[data-f]').forEach(function (el) {
       var k = el.getAttribute('data-f');
@@ -196,7 +196,7 @@
     });
     if (qs.get('sort') && sortSel) sortSel.value = qs.get('sort');
     function toggle(k, v, on) { var a = state[k].filter(function (x) { return x !== v; }); if (on) a.push(v); state[k] = a; apply(); }
-    $$('[data-f-reset]').forEach(function (b) { b.addEventListener('click', function () { state = { brand: [], inv: [], size: [], pmin: '', pmax: '' }; $$('[data-f]').forEach(function (el) { if (el.type === 'checkbox') el.checked = false; else if (el.tagName === 'BUTTON') { el.classList.remove('chip-on'); el.setAttribute('aria-pressed', false); } else el.value = ''; }); apply(); }); });
+    $$('[data-f-reset]').forEach(function (b) { b.addEventListener('click', function () { state = { brand: [], inv: [], size: [], kind: [], kwb: [], pmin: '', pmax: '' }; $$('[data-f]').forEach(function (el) { if (el.type === 'checkbox') el.checked = false; else if (el.tagName === 'BUTTON') { el.classList.remove('chip-on'); el.setAttribute('aria-pressed', false); } else el.value = ''; }); apply(); }); });
     if (sortSel) sortSel.addEventListener('change', apply);
     function apply() {
       var n = 0;
@@ -205,6 +205,8 @@
         if (state.brand.length && state.brand.indexOf(d.brand) < 0) ok = false;
         if (state.inv.length && state.inv.indexOf(d.inv) < 0) ok = false;
         if (state.size.length && state.size.indexOf(d.size) < 0) ok = false;
+        if (state.kind.length && state.kind.indexOf(d.kind) < 0) ok = false;
+        if (state.kwb.length && state.kwb.indexOf(d.kwb) < 0) ok = false;
         if (state.pmin && (!price || price < +state.pmin)) ok = false;
         if (state.pmax && (!price || price > +state.pmax)) ok = false;
         c.hidden = !ok; if (ok) n++;
@@ -220,7 +222,7 @@
       var cnt = $('[data-count]'); if (cnt) cnt.textContent = n + ' ' + plural(n, 'модель', 'модели', 'моделей');
       var em = $('[data-empty]'); if (em) em.classList.toggle('hidden', n > 0);
       var p = new URLSearchParams();
-      ['brand', 'inv', 'size'].forEach(function (k) { if (state[k].length) p.set(k, state[k].join(',')); });
+      ['brand', 'inv', 'size', 'kind', 'kwb'].forEach(function (k) { if (state[k].length) p.set(k, state[k].join(',')); });
       if (state.pmin) p.set('pmin', state.pmin); if (state.pmax) p.set('pmax', state.pmax); if (s) p.set('sort', s);
       history.replaceState(null, '', location.pathname + (p.toString() ? '?' + p : ''));
     }
@@ -332,12 +334,20 @@
       else if (n === 1) { verdict = 'На одну комнату достаточно обычной сплит-системы.'; cls = 'ok'; }
       else if (n <= 5 && total <= 12.3) { verdict = 'Подойдёт мульти-сплит-система: один наружный блок на ' + n + ' ' + plural(n, 'комнату', 'комнаты', 'комнат') + '. По каталогу Kentatsu мульти-сплит-системы — от 4,1 до 12,3 кВт и до 5 внутренних блоков на один наружный. Точную комбинацию инженер проверит по таблицам совместимости.'; cls = 'ok'; }
       else { verdict = (n > 5 ? 'Больше 5 комнат' : 'Суммарно больше 12,3 кВт') + ' — для одного наружного блока мульти-сплита это много. Варианты: две мульти-сплит-системы, отдельные сплиты или VRF-система. Подберём.'; cls = 'warn'; }
+      var need_sum = list.reduce(function (s, x) { return s + x.q; }, 0), odu = '';
+      if (cls === 'ok' && n > 1 && MP_PRODUCTS) {
+        var fit = MP_PRODUCTS.filter(function (p) { return p.r === 'outdoor' && p.n >= n && p.kw >= need_sum; }).sort(function (a, b) { return a.kw - b.kw; });
+        var pick = [], seenB = {};
+        fit.forEach(function (p) { seenB[p.b] = (seenB[p.b] || 0) + 1; if (seenB[p.b] <= 2) pick.push(p); });
+        if (pick.length) odu = '<div class="mp-odu"><p class="ps" style="margin: 0 0 8px;">Наружные блоки из каталога, к которым подключается ' + n + ' ' + plural(n, 'внутренний блок', 'внутренних блока', 'внутренних блоков') + ', с номинальной мощностью от ' + kw(need_sum) + ' кВт:</p><div class="mp-odu-l">' +
+          pick.map(function (p) { return '<a class="mp-odu-i" href="' + p.u + '"><b>' + esc(p.b + ' ' + p.s.replace('Наружный блок ' + p.b + ' ', '')) + '</b><span>' + kw(p.kw) + ' кВт · до ' + p.n + ' блоков</span></a>'; }).join('') + '</div></div>';
+      }
       var sep = list.map(function (x) { return x.z ? cheapest(x.z[0]) : null; });
       var sepSum = sep.every(Boolean) ? sep.reduce(function (s, p) { return s + p.p; }, 0) : 0;
       res.innerHTML = '<div class="mp-tbl">' + list.map(function (x, i) {
         return '<div class="mp-li"><b>' + esc(x.r.n || 'Комната') + '</b><span>' + x.r.s + ' м² → нужно ~' + kw(x.q) + ' кВт</span><span class="mp-z">' + (x.z ? 'типоразмер ' + x.z[0] : 'больше 7 кВт') + '</span></div>';
       }).join('') + '<div class="mp-li mp-sum"><b>Итого</b><span>' + kw(total) + ' кВт по внутренним блокам</span><span></span></div></div>' +
-        '<p class="mp-v mp-' + cls + '">' + verdict + '</p>' +
+        '<p class="mp-v mp-' + cls + '">' + verdict + '</p>' + odu +
         '<div class="mp-a"><a class="btn btn-p" href="#pd-obj" data-mp-send>Отправить на подбор мульти-сплита</a>' +
         (sepSum && n > 1 ? '<button class="btn btn-o" type="button" data-mp-sep>Отдельные сплиты в заявку — от ' + fmt(sepSum) + ' ₽</button>' : '') + '</div>' +
         (sepSum && n > 1 ? '<p class="ps" style="margin: 8px 0 0;">Цена отдельных сплит-систем — по самым доступным инверторным моделям нужных типоразмеров из каталога, без монтажа.</p>' : '');
@@ -495,6 +505,35 @@
         function () { throw new Error('Нет связи с сервером. Проверьте интернет и попробуйте ещё раз.'); });
   }
   var hasProfile = function () { return !!(AUTH.token && AUTH.user && AUTH.user.fio); };
+  // после входа возвращаем туда, откуда пришли (?next=/biblioteka)
+  function goNext() { var n = new URLSearchParams(location.search).get('next') || ''; if (/^\/[^\/\\]/.test(n)) setTimeout(function () { location.href = n; }, 600); }
+  /* ---------- библиотека проектировщика ---------- */
+  var libCards = $$('[data-lib]');
+  if (libCards.length) {
+    var logged = !!AUTH.token, gate = $('[data-lib-gate]'), u0 = AUTH.user || {};
+    if (gate) gate.hidden = logged;
+    libCards.forEach(function (card) {
+      var d = {}; try { d = JSON.parse(card.getAttribute('data-lib')); } catch (e) {}
+      var nextUrl = '/kabinet?next=' + encodeURIComponent('/biblioteka#' + d.id);
+      var dl = $('[data-lib-dl]', card), rq = $('[data-lib-req]', card);
+      if (dl) {
+        if (!logged) { dl.removeAttribute('download'); dl.href = nextUrl; dl.textContent = 'Войти и скачать'; }
+        else dl.addEventListener('click', function () { goal('lib_download', { doc: d.id }); });
+      }
+      if (rq) {
+        if (!logged) rq.textContent = 'Войти и получить';
+        rq.addEventListener('click', function () {
+          if (!logged) { location.href = nextUrl; return; }
+          if (!CFG.forms) return;
+          rq.disabled = true; rq.textContent = 'Отправляем…';
+          var f = { 'Каталог': d.t, 'Почта': u0.email || '', 'Имя': u0.fio || '', 'Телефон': u0.phone || '', 'Организация': u0.company || '' };
+          fetch(CFG.forms, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ form: 'biblioteka', page: location.pathname, title: document.title, fields: f, ref: '' }) })
+            .then(function (r) { if (!r.ok) throw new Error('http'); rq.textContent = 'Пришлём на ' + (u0.email || 'почту'); goal('lib_request', { doc: d.id }); })
+            .catch(function () { rq.disabled = false; rq.textContent = 'Не отправилось — ещё раз'; });
+        });
+      }
+    });
+  }
 
   // заявки, отправленные с этого устройства
   function sentList() { try { return JSON.parse(localStorage.getItem('ax-sent') || '[]'); } catch (e) { return []; } }
@@ -555,7 +594,7 @@
       say(f2, 'Проверяем…'); b.disabled = true;
       authApi({ action: 'verify', email: email, code: code }).then(function (j) {
         AUTH.token = j.token; AUTH.user = j.user || { email: email }; saveAuth(); goal('auth_login'); show();
-        if (!hasProfile()) $('#p-fio').focus();
+        if (!hasProfile()) $('#p-fio').focus(); else goNext();
       }, function (er) { say(f2, er.message, true); }).then(function () { b.disabled = false; });
     });
     pf.addEventListener('submit', function (e) {
@@ -570,7 +609,7 @@
       if (errs.length) return say(pf, 'Пожалуйста, ' + errs.join(', ') + '.', true);
       var b = $('button[type=submit]', pf); say(pf, 'Сохраняем…'); b.disabled = true;
       var body = { action: 'register', token: AUTH.token }; for (var k in p) body[k] = p[k];
-      authApi(body).then(function (j) { AUTH.user = j.user; saveAuth(); goal('auth_register'); show(); say(pf, 'Сохранено.'); },
+      authApi(body).then(function (j) { AUTH.user = j.user; saveAuth(); goal('auth_register'); show(); say(pf, 'Сохранено.'); goNext(); },
         function (er) { if (er.status === 401) { AUTH.token = ''; AUTH.user = null; saveAuth(); show(); say(f1, 'Сессия истекла — запросите код ещё раз.', true); } else say(pf, er.message, true); })
         .then(function () { b.disabled = false; });
     });
