@@ -299,6 +299,70 @@
     });
   }
 
+  /* ---------- подбор на несколько комнат (мульти-сплит или отдельные сплиты) ---------- */
+  var mp = $('[data-multi]');
+  if (mp) {
+    var SIZES = [['07', 2.1], ['09', 2.6], ['12', 3.5], ['18', 5.3], ['24', 7.0]];
+    var SUN = [['Мало', 30], ['Средне', 35], ['Много', 40]];
+    var rooms = [{ n: 'Спальня', s: 16, sun: 35 }, { n: 'Гостиная', s: 24, sun: 35 }];
+    var MP_PRODUCTS = null;
+    fetch('/static/products.json').then(function (r) { return r.json(); }).then(function (d) { MP_PRODUCTS = d; draw(); });
+    var rowsBox = $('[data-mp-rows]', mp), res = $('[data-mp-res]', mp);
+    function need(r) { return r.s * 2.7 * r.sun / 1000 + 0.13; }
+    function size(q) { for (var i = 0; i < SIZES.length; i++) if (SIZES[i][1] >= q) return SIZES[i]; return null; }
+    function cheapest(z) {
+      if (!MP_PRODUCTS) return null;
+      return MP_PRODUCTS.filter(function (p) { return p.sec === 'split' && p.z === z && p.inv && p.p; }).sort(function (a, b) { return a.p - b.p; })[0] || null;
+    }
+    function rowsHtml() {
+      return rooms.map(function (r, i) {
+        return '<div class="mp-r"><input class="inp" aria-label="Комната" value="' + esc(r.n) + '" data-i="' + i + '" data-k="n">' +
+          '<label class="mp-s"><input class="inp" type="number" min="5" max="150" inputmode="numeric" aria-label="Площадь, м²" value="' + r.s + '" data-i="' + i + '" data-k="s"><span>м²</span></label>' +
+          '<select class="inp" aria-label="Солнце" data-i="' + i + '" data-k="sun">' + SUN.map(function (x) { return '<option value="' + x[1] + '"' + (x[1] === r.sun ? ' selected' : '') + '>Солнце: ' + x[0].toLowerCase() + '</option>'; }).join('') + '</select>' +
+          '<button class="ibtn" type="button" aria-label="Удалить комнату" data-del="' + i + '"' + (rooms.length < 2 ? ' disabled' : '') + '>×</button></div>';
+      }).join('');
+    }
+    function draw(full) {
+      if (full !== false) rowsBox.innerHTML = rowsHtml();
+      var list = rooms.map(function (r) { var q = need(r), z = size(q); return { r: r, q: q, z: z }; });
+      var total = list.reduce(function (s, x) { return s + (x.z ? x.z[1] : x.q); }, 0);
+      var big = list.some(function (x) { return !x.z; });
+      var n = rooms.length, verdict, cls;
+      if (big) { verdict = 'В одной из комнат нужно больше 7 кВт — для неё подойдёт полупромышленный кондиционер. Подберём схему под объект.'; cls = 'warn'; }
+      else if (n === 1) { verdict = 'На одну комнату достаточно обычной сплит-системы.'; cls = 'ok'; }
+      else if (n <= 5 && total <= 12.3) { verdict = 'Подойдёт мульти-сплит-система: один наружный блок на ' + n + ' ' + plural(n, 'комнату', 'комнаты', 'комнат') + '. По каталогу Kentatsu мульти-сплит-системы — от 4,1 до 12,3 кВт и до 5 внутренних блоков на один наружный. Точную комбинацию инженер проверит по таблицам совместимости.'; cls = 'ok'; }
+      else { verdict = (n > 5 ? 'Больше 5 комнат' : 'Суммарно больше 12,3 кВт') + ' — для одного наружного блока мульти-сплита это много. Варианты: две мульти-сплит-системы, отдельные сплиты или VRF-система. Подберём.'; cls = 'warn'; }
+      var sep = list.map(function (x) { return x.z ? cheapest(x.z[0]) : null; });
+      var sepSum = sep.every(Boolean) ? sep.reduce(function (s, p) { return s + p.p; }, 0) : 0;
+      res.innerHTML = '<div class="mp-tbl">' + list.map(function (x, i) {
+        return '<div class="mp-li"><b>' + esc(x.r.n || 'Комната') + '</b><span>' + x.r.s + ' м² → нужно ~' + kw(x.q) + ' кВт</span><span class="mp-z">' + (x.z ? 'типоразмер ' + x.z[0] : 'больше 7 кВт') + '</span></div>';
+      }).join('') + '<div class="mp-li mp-sum"><b>Итого</b><span>' + kw(total) + ' кВт по внутренним блокам</span><span></span></div></div>' +
+        '<p class="mp-v mp-' + cls + '">' + verdict + '</p>' +
+        '<div class="mp-a"><a class="btn btn-p" href="#pd-obj" data-mp-send>Отправить на подбор мульти-сплита</a>' +
+        (sepSum && n > 1 ? '<button class="btn btn-o" type="button" data-mp-sep>Отдельные сплиты в заявку — от ' + fmt(sepSum) + ' ₽</button>' : '') + '</div>' +
+        (sepSum && n > 1 ? '<p class="ps" style="margin: 8px 0 0;">Цена отдельных сплит-систем — по самым доступным инверторным моделям нужных типоразмеров из каталога, без монтажа.</p>' : '');
+    }
+    mp.addEventListener('input', function (e) {
+      var t = e.target, i = t.getAttribute('data-i'); if (i == null) return;
+      var k = t.getAttribute('data-k'); rooms[+i][k] = k === 'n' ? t.value : Math.max(0, +t.value || 0); draw(false);
+    });
+    mp.addEventListener('change', function (e) { var t = e.target; if (t.getAttribute('data-k') === 'sun') { rooms[+t.getAttribute('data-i')].sun = +t.value; draw(false); } });
+    mp.addEventListener('click', function (e) {
+      var d = e.target.closest('[data-del]'); if (d) { rooms.splice(+d.getAttribute('data-del'), 1); draw(); return; }
+      if (e.target.closest('[data-mp-add]')) { if (rooms.length >= 8) return; rooms.push({ n: 'Комната ' + (rooms.length + 1), s: 15, sun: 35 }); draw(); return; }
+      if (e.target.closest('[data-mp-send]')) {
+        var ta = $('#pd-obj'); if (ta) { ta.value = rooms.map(function (r) { var z = size(need(r)); return r.n + ': ' + r.s + ' м², ' + (z ? 'типоразмер ' + z[0] : 'больше 7 кВт'); }).join('\n'); }
+        goal('multi_send'); return;
+      }
+      if (e.target.closest('[data-mp-sep]')) {
+        rooms.forEach(function (r) { var z = size(need(r)), p = z && cheapest(z[0]); if (p) addToCart({ id: p.id, t: p.t, u: p.u, p: p.p, img: p.img }, 1); });
+        store.set('ax-calc', 'Подбор на несколько комнат: ' + rooms.map(function (r) { return r.n + ' ' + r.s + ' м²'; }).join(', '));
+        goal('multi_sep');
+      }
+    });
+    draw();
+  }
+
   /* ---------- калькулятор ---------- */
   var calc = $('[data-calc]');
   if (calc) {
