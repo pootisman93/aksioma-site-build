@@ -515,11 +515,11 @@
     libCards.forEach(function (card) {
       var d = {}; try { d = JSON.parse(card.getAttribute('data-lib')); } catch (e) {}
       var nextUrl = '/kabinet?next=' + encodeURIComponent('/biblioteka#' + d.id);
-      var dl = $('[data-lib-dl]', card), rq = $('[data-lib-req]', card);
-      if (dl) {
-        if (!logged) { dl.removeAttribute('download'); dl.href = nextUrl; dl.textContent = 'Войти и скачать'; }
+      var dls = $$('[data-lib-dl]', card), rq = $('[data-lib-req]', card);
+      dls.forEach(function (dl, i) {
+        if (!logged) { if (i) { dl.hidden = true; return; } dl.removeAttribute('download'); dl.href = nextUrl; dl.textContent = 'Войти и скачать'; }
         else dl.addEventListener('click', function () { goal('lib_download', { doc: d.id }); });
-      }
+      });
       if (rq) {
         if (!logged) rq.textContent = 'Войти и получить';
         rq.addEventListener('click', function () {
